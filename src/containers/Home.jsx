@@ -1,15 +1,27 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { connect } from 'react-redux';
+import Header from '../components/Header';
 import Search from '../components/Search';
 import Categories from '../components/Categories';
 import Carousel from '../components/Carousel';
 import CarouselItem from '../components/CarouselItem';
 
-const Home = ({ myList, trends, originals }) => {
+const Home = ({ myList, trends, originals, search }) => {
   return (
     <>
-      <Search />
+      <Header />
+      <Search isHome />
+      {search?.length > 0 && (
+        <Categories title='search'>
+          <Carousel>
+            {search?.map((item) => {
+              return <CarouselItem key={item.id} {...item} />;
+            })}
+          </Carousel>
+        </Categories>
+      )}
+
       {myList?.length > 0 && (
         <Categories title='Mi lista'>
           <Carousel>
@@ -44,6 +56,7 @@ const mapStateToProps = (state) => {
     myList: state.myList,
     trends: state.trends,
     originals: state.originals,
+    search: state.search,
   };
 };
 
